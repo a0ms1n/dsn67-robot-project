@@ -1,19 +1,11 @@
-const int trigPin = 10;  
-const int echoPin = 11; 
+//Install NewPing 
+#include <NewPing.h>
 
-double readDistance(){
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(2);
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
 
-  long duration = pulseIn(echoPin, HIGH);
-  double distance = (duration*.0343)/2;
-  Serial.print("Distance: ");
-  Serial.println(distance);
-  delay(100);
-}
+const int trigPin = 11;  
+const int echoPin = 10; 
+NewPing sonar(trigPin,echoPin, 200);
+
 
 void setup() {
   pinMode(trigPin, OUTPUT);  
@@ -23,6 +15,6 @@ void setup() {
 }
 
 void loop() {
-  Serial.println(readDistance());
+  Serial.print(sonar.ping_cm());
   delay(10000);
 }
