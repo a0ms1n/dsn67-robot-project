@@ -27,16 +27,19 @@ void SetRight(bool a,bool b){
   digitalWrite(M2_b,b);
 }
 
+#define Forward() SetLeft(1,0);SetRight(1,0)
+#define Backward() SetLeft(0,1);SetRight(0,1)
+#define TurnLeft() SetLeft(0,1);SetRight(1,0)
+#define TurnRight() SetLeft(1,0);SetRight(0,1)
+
 void setup() {
   pinMode(trigPin, OUTPUT);  
 	pinMode(echoPin, INPUT);  
 	Serial.begin(9600); 
   servo.attach(servoPin);
-  servo.write(0);
+  servo.write(90);
   delay(100);
   pinMode(M1_a, OUTPUT); pinMode(M1_b, OUTPUT); pinMode(M2_a, OUTPUT); pinMode(M2_b, OUTPUT);
-  SetLeft(0,1);
-  SetRight(1,0);
 }
 
 void loop() {
