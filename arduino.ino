@@ -27,6 +27,20 @@ void SetRight(bool a,bool b){
   digitalWrite(M2_b,b);
 }
 
+long long scan(){
+  long long sum = 0;
+  long long divisor = 0;
+  servo.write(0);
+  delay(1500);
+  for(int i=0;i<=180;i+=30){
+    servo.write(i);
+    sum += sonar.ping();
+    divisor += i;
+    delay(200);
+  }
+  return sum /divisor;
+}
+
 #define Forward() SetLeft(1,0);SetRight(1,0)
 #define Backward() SetLeft(0,1);SetRight(0,1)
 #define TurnLeft() SetLeft(0,1);SetRight(1,0)
@@ -43,6 +57,6 @@ void setup() {
 }
 
 void loop() {
-  Serial.println(sonar.ping_cm());
-  delay(100);
+  Serial.println((int)scan());
+  delay(5000);
 }
