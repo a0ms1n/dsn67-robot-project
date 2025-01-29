@@ -27,18 +27,20 @@ void SetRight(bool a,bool b){
   digitalWrite(M2_b,b);
 }
 
-long long scan(){
-  long long sum = 0;
-  long long divisor = 0;
+const int par = 25;
+const int cnt = 180/par;
+long long scan_arr[(int)(180/par) + 20] = {0};
+
+void scan(){
   servo.write(0);
   delay(1500);
-  for(int i=0;i<=180;i+=30){
-    servo.write(i);
-    sum += sonar.ping();
-    divisor += i;
-    delay(200);
+  for(int i=0;i<=cnt;i++){
+    servo.write(i*par);
+    delay(190);
+    scan_arr[i] = sonar.ping();
+    delay(15);
   }
-  return sum /divisor;
+  servo.write(90);
 }
 
 #define Forward() SetLeft(1,0);SetRight(1,0)
@@ -57,6 +59,11 @@ void setup() {
 }
 
 void loop() {
-  Serial.println((int)scan());
+  scan();
+  for(int i=0;i<=cnt;i++){
+    Serial.print((int)scan_arr[i]);Serial.print(" ");
+    
+  }
+  Serial.println();
   delay(5000);
 }
