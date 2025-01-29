@@ -27,31 +27,30 @@ void SetRight(bool a,bool b){
   digitalWrite(M2_b,b);
 }
 
-const int par = 25;
-const int cnt = 180/par;
-long long scan_arr[(int)(180/par) + 20] = {0};
-
-void scan(){
+long long scan(){
+  long long sum = 0;
+  long long divisor = 0;
   servo.write(0);
   delay(1500);
-  for(int i=0;i<=cnt;i++){
-    servo.write(i*par);
-    delay(190);
-    scan_arr[i] = sonar.ping();
-    delay(15);
+  for(int i=0;i<=180;i+=30){
+    servo.write(i);
+    sum += sonar.ping();
+    divisor += i;
+    delay(200);
   }
-  servo.write(90);
+  return sum /divisor;
 }
 
 #define Forward() SetLeft(1,0);SetRight(1,0)
 #define Backward() SetLeft(0,1);SetRight(0,1)
 #define TurnLeft() SetLeft(0,1);SetRight(1,0)
 #define TurnRight() SetLeft(1,0);SetRight(0,1)
+#define Stop() SetLeft(0,0);SetRight(0,0)
 
 void setup() {
   pinMode(trigPin, OUTPUT);  
-	pinMode(echoPin, INPUT);  
-	Serial.begin(9600); 
+  pinMode(echoPin, INPUT);  
+  Serial.begin(9600); 
   servo.attach(servoPin);
   servo.write(90);
   delay(100);
@@ -59,11 +58,18 @@ void setup() {
 }
 
 void loop() {
-  scan();
-  for(int i=0;i<=cnt;i++){
-    Serial.print((int)scan_arr[i]);Serial.print(" ");
-    
-  }
-  Serial.println();
-  delay(5000);
+  run();
+}
+
+int detect_range = 12;
+
+void run(){
+  Forward();
+  while(sonar.ping_cm()>detect_range);
+  Stop();
+  Backward();
+  delay(200);
+  Stop();
+  
+
 }
