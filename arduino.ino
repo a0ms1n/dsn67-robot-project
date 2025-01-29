@@ -41,8 +41,8 @@ long long scan(){
   return sum /divisor;
 }
 
-#define Forward() SetLeft(1,0);SetRight(1,0)
-#define Backward() SetLeft(0,1);SetRight(0,1)
+#define Forward() SetLeft(0,1);SetRight(0,1)
+#define Backward() SetLeft(1,0);SetRight(1,0)
 #define TurnLeft() SetLeft(0,1);SetRight(1,0)
 #define TurnRight() SetLeft(1,0);SetRight(0,1)
 #define Stop() SetLeft(0,0);SetRight(0,0)
@@ -50,22 +50,25 @@ long long scan(){
 void setup() {
   pinMode(trigPin, OUTPUT);  
   pinMode(echoPin, INPUT);  
-  Serial.begin(9600); 
+  Serial.begin(115200); 
   servo.attach(servoPin);
   servo.write(90);
   delay(100);
   pinMode(M1_a, OUTPUT); pinMode(M1_b, OUTPUT); pinMode(M2_a, OUTPUT); pinMode(M2_b, OUTPUT);
+  run();
+  Serial.println(sonar.ping_cm());
 }
 
 void loop() {
-  run();
+  //run();
 }
 
-int detect_range = 12;
+int detect_range = 4;
 
 void run(){
   Forward();
-  while(sonar.ping_cm()>detect_range);
+  while(sonar.ping_cm()>detect_range)delay(70);
+  Serial.println(sonar.ping_cm());
   Stop();
   Backward();
   delay(200);
